@@ -1,137 +1,109 @@
-# 💖 Will You Be My Valentine? - Interactive Game
+# Valentine Game
 
-A delightful, fun-first Valentine's Day game where the "No" button playfully runs away, leading to entertaining mini-games and progressive rewards.
+This is a simple game for Valentine's Day where the No button moves away when you try to click it. It includes several mini games and rewards.
 
-## 🎮 Features
+## Features
 
-### Core Gameplay
-- **Charming Proposal**: Beautiful scene with glowing YES button and playful NO button
-- **Playful Chase**: NO button moves in predictable circular patterns around screen center
-- **Progressive Rewards**: Unlock heart trails, decorations, and special effects
-- **Positive Reinforcement**: Every action creates something cute and delightful
+### Gameplay
+* Proposal: A screen with Yes and No buttons.
+* Chase: The No button moves in circular patterns.
+* Rewards: Unlocks include trails and decorations.
+* Feedback: Actions trigger visual effects and messages.
 
-### Mini-Games
-1. **Heart Catcher** 💕 - Catch falling hearts with your basket
-2. **Memory Match** 🎴 - Match pairs of adorable emojis  
-3. **Love Maze** 🌹 - Navigate through a maze to find love
+### Mini Games
+1. Heart Catcher: Catch hearts in a basket.
+2. Memory Match: Match pairs of icons.
+3. Love Maze: Find your way through a maze.
 
-### Visual Excellence
-- **Three.js 3D Background**: Beautiful floating 3D hearts
-- **Smooth Animations**: Professional CSS animations throughout
-- **Particle Effects**: Hearts, sparkles, and confetti
-- **Responsive Design**: Works on all screen sizes
+### Visuals
+* Three.js background: Floating 3D objects.
+* Animations: CSS based movement.
+* Particles: Effects for different actions.
+* Responsive: Works on multiple screen sizes.
 
-## 📁 Project Structure
+## Project Structure
 
-```
-valentine-game/
-├── index.html              # Main HTML file
-├── styles/
-│   ├── main.css           # Core styling and layout
-│   ├── animations.css     # All animation keyframes
-│   └── games.css          # Mini-game specific styles
-└── js/
-    ├── three-background.js    # Three.js 3D heart background
-    ├── utils.js               # Utility functions (particles, sounds)
-    ├── game-state.js          # Game state management
-    ├── scene-manager.js       # Background decorations
-    ├── button-controller.js   # YES/NO button behavior
-    ├── heart-catcher.js       # Heart Catcher mini-game
-    ├── memory-match.js        # Memory Match mini-game
-    ├── love-maze.js           # Love Maze mini-game
-    └── main.js                # Initialization
-```
+valentine game/
+* index.html: Main file
+* styles/
+  * main.css: Core styles
+  * animations.css: Keyframes
+  * games.css: Game styles
+* js/
+  * three background.js: Background logic
+  * utils.js: Helper functions
+  * game state.js: State management
+  * scene manager.js: Background items
+  * button controller.js: Button logic
+  * heart catcher.js: Mini game logic
+  * memory match.js: Mini game logic
+  * love maze.js: Mini game logic
+  * main.js: Entry point
 
-## 🚀 How to Run
+## How to Run
 
-Simply open `index.html` in any modern web browser. No build process required!
+Open index.html in a browser.
 
-```bash
-# Option 1: Direct file
-open index.html
+Option 1: Open the file directly.
+Option 2: Use a local server like python.
 
-# Option 2: Local server (recommended)
-python -m http.server 8000
-# Then visit http://localhost:8000
-```
+## Game Phases
 
-## 🎯 Game Phases
+### Phase 1: The Proposal
+* Gradient background with floating items.
+* Yes button is large.
+* No button wiggles.
 
-### Phase 1: The Charming Proposal
-- Beautiful gradient background with 3D floating hearts
-- Large glowing YES button
-- Small wiggling NO button
+### Phase 2: The Chase
+* No button moves in a circle.
+* Moving leaves a trail.
+* Messages appear on screen.
 
-### Phase 2: The Playful Chase
-- NO button runs away in smooth circular motion
-- Creates heart trails as it moves
-- Encouraging messages appear
+### Phase 3: Mini Games
+* Games unlock after 5 attempts to click No.
+* A new game appears every 3 clicks after that.
+* Win points to get rewards.
 
-### Phase 3: Mini-Game Rewards
-- After 5 NO clicks, unlock mini-games
-- Games appear every 3 clicks after that
-- Win rewards and charm points
+### Phase 4: Unlocks
+* 50 points: Trail unlocked.
+* 100 points: Hat decoration.
+* 200 points: Bow decoration.
+* 300 points: Crown decoration.
 
-### Phase 4: Progressive Unlocks
-- **50 charm**: Heart trail unlocked
-- **100 charm**: Top hat decoration 🎩
-- **200 charm**: Bow tie decoration 🎀
-- **300 charm**: Crown decoration 👑
+### Phase 5: Surrender
+* Yes button grows over time.
+* A button to skip appears after 2 minutes.
+* Ending screen with particles.
 
-### Phase 5: Sweet Surrender
-- YES button grows over time
-- "Take me to YES" button appears after 2 minutes
-- Beautiful ending with confetti and heart explosions
+## Design
+* Control: The user can click Yes at any time.
+* Effects: Visuals are meant to be lighthearted.
+* Progression: Interactions reveal new items.
+* Accessibility: Yes is always easy to find.
 
-## 🎨 Design Philosophy
+## Technical Details
+* No dependencies besides Three.js from a CDN.
+* Vanilla JavaScript.
+* CSS for layout and animations.
+* Overlays for game screens.
 
-### Empowerment Over Punishment
-Players always feel in control and can click YES at any time.
+## Audio
+* Uses Web Audio API.
+* Tones for different events.
+* No external files needed.
 
-### Delightful Chaos
-Effects are entertaining to watch, never frustrating.
+## Browser Support
+* Chrome 90 plus.
+* Firefox 88 plus.
+* Safari 14 plus.
+* Opera 76 plus.
 
-### Progressive Rewards
-Each "No" attempt reveals something charming.
+## Credits
+* Standard game design patterns.
+* Three.js for graphics.
+* Google Fonts for typography.
 
-### Easy Escape
-YES is always clearly accessible and becomes more appealing over time.
+## License
+* Free for personal use.
 
-## 💻 Technical Details
-
-- **No dependencies** (except Three.js from CDN)
-- **Pure vanilla JavaScript** - no frameworks
-- **Modern CSS** with custom properties and animations
-- **Responsive overlays** with proper z-index management
-- **Optimized animations** using requestAnimationFrame
-
-## 🎵 Audio
-
-Simple Web Audio API beeps for interactions:
-- Higher pitch for positive actions
-- Pleasant tones for game events
-- No external audio files needed
-
-## 📱 Browser Support
-
-Works on all modern browsers:
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Opera 76+
-
-## 🌟 Credits
-
-Created with ❤️ following the "fun-first" game design philosophy.
-
-Special thanks to:
-- Three.js for the 3D graphics library
-- Google Fonts for Poppins font
-
-## 📝 License
-
-Free to use for personal projects. Spread the love! 💕
-
----
-
-**Made with 💖 for Valentine's Day**
+Made for Valentine's Day.
