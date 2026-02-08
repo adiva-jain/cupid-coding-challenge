@@ -1,6 +1,6 @@
 // Memory Match Mini-Game
 const MemoryMatch = {
-    emojis: ['💖', '💕', '💗', '💝', '💘', '❤️', '🌹', '💐'],
+    emojis: ['Heart', 'Star', 'Circle', 'Square', 'Triangle', 'Diamond', 'Rose', 'Flower'],
     cards: [],
     flippedCards: [],
     matchedPairs: 0,
@@ -89,7 +89,7 @@ const MemoryMatch = {
         Utils.hideOverlay('memory-game-overlay');
 
         if (completed) {
-            Utils.showMessage("Perfect! You matched them all! 🎉");
+            Utils.showMessage("Perfect! You matched them all!");
             GameState.addCharm(50);
         } else {
             GameState.addCharm(this.matchedPairs * 10);
