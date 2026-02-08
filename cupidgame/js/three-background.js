@@ -1,4 +1,4 @@
-// Three.js 3D Background with floating hearts
+// Three.js Sci-Fi Background with metallic hearts and starfield
 (function () {
     const canvas = document.getElementById('bg-canvas');
     const scene = new THREE.Scene();
@@ -6,8 +6,8 @@
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    camera.position.z = 30;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 40;
 
     // Create heart shape
     function createHeartShape() {
@@ -23,100 +23,104 @@
         return heartShape;
     }
 
-    // Create hearts
-    const hearts = [];
+    // Geometry
     const heartGeometry = new THREE.ExtrudeGeometry(createHeartShape(), {
-        depth: 0.5,
+        depth: 0.4,
         bevelEnabled: true,
-        bevelSegments: 2,
+        bevelSegments: 3,
         steps: 2,
         bevelSize: 0.1,
         bevelThickness: 0.1
     });
 
-    const colors = [0xff6b9d, 0xf093fb, 0xfed6e3, 0xff69b4, 0xffa8c5];
+    const hearts = [];
+    const colors = [0xff2d75, 0xff003c, 0xffffff, 0xff5e62];
 
-    for (let i = 0; i < 25; i++) {
+    // Create metallic hearts
+    for (let i = 0; i < 30; i++) {
+        const isWireframe = Math.random() > 0.7;
         const material = new THREE.MeshPhongMaterial({
             color: colors[Math.floor(Math.random() * colors.length)],
             transparent: true,
-            opacity: 0.4,
-            shininess: 100
+            opacity: isWireframe ? 0.3 : 0.6,
+            shininess: 200,
+            specular: 0xffffff,
+            wireframe: isWireframe
         });
 
         const heart = new THREE.Mesh(heartGeometry, material);
-
-        // Random position
-        heart.position.x = (Math.random() - 0.5) * 100;
-        heart.position.y = (Math.random() - 0.5) * 100;
-        heart.position.z = (Math.random() - 0.5) * 100;
-
-        // Random rotation
-        heart.rotation.x = Math.random() * Math.PI;
-        heart.rotation.y = Math.random() * Math.PI;
-
-        // Random scale
-        const scale = 0.5 + Math.random() * 1;
+        heart.position.set((Math.random() - 0.5) * 120, (Math.random() - 0.5) * 120, (Math.random() - 0.5) * 100);
+        heart.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+        const scale = 0.8 + Math.random() * 1.5;
         heart.scale.set(scale, scale, scale);
 
-        // Store animation properties
         heart.userData = {
             rotationSpeed: (Math.random() - 0.5) * 0.01,
-            floatSpeed: 0.01 + Math.random() * 0.02,
-            floatOffset: Math.random() * Math.PI * 2
+            floatSpeed: 0.005 + Math.random() * 0.015,
+            floatOffset: Math.random() * Math.PI * 2,
+            isWireframe: isWireframe
         };
 
         hearts.push(heart);
         scene.add(heart);
     }
 
-    // Add lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Create Starfield
+    const starGeometry = new THREE.BufferGeometry();
+    const starCount = 1000;
+    const starCoords = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount * 3; i++) {
+        starCoords[i] = (Math.random() - 0.5) * 400;
+    }
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starCoords, 3));
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.8 });
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const pointLight1 = new THREE.PointLight(0xff6b9d, 1, 100);
-    pointLight1.position.set(10, 10, 10);
-    scene.add(pointLight1);
+    const mainLight = new THREE.DirectionalLight(0xff2d75, 1);
+    mainLight.position.set(10, 20, 30);
+    scene.add(mainLight);
 
-    const pointLight2 = new THREE.PointLight(0xf093fb, 1, 100);
-    pointLight2.position.set(-10, -10, 10);
-    scene.add(pointLight2);
+    const redLight = new THREE.PointLight(0xff003c, 2, 100);
+    redLight.position.set(-20, -10, 20);
+    scene.add(redLight);
 
-    // Animation
+    // Animation loop
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
         time += 0.01;
 
-        hearts.forEach((heart, index) => {
-            // Rotate
+        hearts.forEach(heart => {
             heart.rotation.y += heart.userData.rotationSpeed;
-            heart.rotation.x += heart.userData.rotationSpeed * 0.5;
-
-            // Float up and down
+            heart.rotation.z += heart.userData.rotationSpeed * 0.5;
             heart.position.y += Math.sin(time + heart.userData.floatOffset) * heart.userData.floatSpeed;
 
-            // Gentle drift
-            heart.position.x += Math.cos(time * 0.5 + heart.userData.floatOffset) * 0.005;
+            if (heart.userData.isWireframe) {
+                heart.material.opacity = 0.2 + Math.abs(Math.sin(time * 2)) * 0.3;
+            }
         });
 
-        // Rotate camera slightly
-        camera.position.x = Math.sin(time * 0.1) * 5;
-        camera.position.y = Math.cos(time * 0.15) * 3;
-        camera.lookAt(scene.position);
+        stars.rotation.y += 0.0002;
+        camera.position.x = Math.sin(time * 0.1) * 8;
+        camera.position.y = Math.cos(time * 0.15) * 5;
+        camera.lookAt(0, 0, 0);
 
         renderer.render(scene, camera);
     }
 
     animate();
 
-    // Handle window resize
+    // Resize handler
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Expose for potential interaction
     window.threeScene = { scene, camera, renderer, hearts };
 })();
