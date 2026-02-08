@@ -1,0 +1,183 @@
+/* ==================== ANIMATIONS ==================== */
+
+/* Gentle pulse for question */
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        transform: translateX(-50%) scale(1.04);
+    }
+}
+
+#question {
+    animation: gentlePulse 3s ease-in-out infinite;
+}
+
+/* YES button glow */
+@keyframes yesGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.3),
+            0 0 35px rgba(255, 107, 157, 0.6),
+            inset 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.3),
+            0 0 60px rgba(255, 107, 157, 1),
+            inset 0 0 35px rgba(255, 255, 255, 0.3);
+    }
+}
+
+#yes-button {
+    animation: yesGlow 2s ease-in-out infinite;
+}
+
+/* NO button wiggle */
+@keyframes subtleWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(-2deg) scale(1.02);
+    }
+
+    75% {
+        transform: rotate(2deg) scale(1.02);
+    }
+}
+
+/* Particle rise animation */
+@keyframes particleRise {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-180px) scale(0.2) rotate(360deg);
+    }
+}
+
+.particle {
+    animation: particleRise 2.5s ease-out forwards;
+}
+
+/* Heart trail fade */
+@keyframes trailFade {
+    0% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+.heart-trail {
+    animation: trailFade 1.2s ease-out forwards;
+}
+
+/* Background heart float */
+@keyframes floatHeart {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.15;
+    }
+
+    50% {
+        transform: translateY(-60px) rotate(15deg) scale(1.1);
+        opacity: 0.25;
+    }
+}
+
+.bg-heart {
+    animation: floatHeart 18s ease-in-out infinite;
+}
+
+/* Cloud float */
+@keyframes cloudFloat {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(120px, -40px);
+    }
+}
+
+.pixel-cloud {
+    animation: cloudFloat 25s ease-in-out infinite;
+}
+
+/* Button decoration spin */
+@keyframes decorationSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Ending heartbeat */
+@keyframes endingBeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+/* Fade in overlay */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Confetti fall */
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: confettiFall linear forwards;
+}
