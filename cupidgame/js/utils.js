@@ -1,7 +1,7 @@
 // Utility Functions
 const Utils = {
     // Spawn particle effects
-    spawnParticles(x, y, emoji = '💖', count = 8) {
+    spawnParticles(x, y, text = 'Heart', count = 8) {
         const scene = document.getElementById('scene');
         for (let i = 0; i < count; i++) {
             const particle = document.createElement('div');
