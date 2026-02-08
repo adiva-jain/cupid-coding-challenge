@@ -6,7 +6,7 @@ const Utils = {
         for (let i = 0; i < count; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
-            particle.textContent = emoji;
+            particle.textContent = text;
             const angle = (Math.PI * 2 * i) / count;
             const distance = 30 + Math.random() * 40;
             particle.style.left = (x + Math.cos(angle) * distance) + 'px';
@@ -24,7 +24,7 @@ const Utils = {
         const scene = document.getElementById('scene');
         const trail = document.createElement('div');
         trail.className = 'heart-trail';
-        trail.textContent = ['💕', '💖', '💗'][Math.floor(Math.random() * 3)];
+        trail.textContent = 'o';
         trail.style.left = x + 'px';
         trail.style.top = y + 'px';
         scene.appendChild(trail);
