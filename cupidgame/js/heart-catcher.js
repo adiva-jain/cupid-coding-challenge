@@ -4,112 +4,173 @@ const HeartCatcher = {
     active: false,
     basket: null,
     gameArea: null,
+    spawnInterval: null,
+    checkIntervals: [],
 
     init() {
         this.basket = document.getElementById('basket');
+        // Replace basket text with shape class if needed, or ensure CSS handles it
+        this.basket.innerHTML = '';
+        this.basket.classList.add('game-basket');
+
         this.gameArea = document.getElementById('heart-catcher-area');
 
-        // Close button
-        document.querySelector('#heart-catcher-overlay .close-game-btn').addEventListener('click', () => {
-            this.end();
-        });
+        // Close button logic
+        const closeBtn = document.querySelector('#heart-catcher-overlay .close-game-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.end(false);
+            });
+        }
     },
 
     start() {
+        if (this.active) return;
+
         Utils.showOverlay('heart-catcher-overlay');
         this.active = true;
         this.score = 0;
         document.getElementById('game-score').textContent = `Score: ${this.score}`;
 
-        let basketX = 230;
+        // Reset basket position
+        this.basket.style.left = '230px';
 
         // Mouse control for basket
-        const mouseMoveHandler = (e) => {
+        this.mouseMoveHandler = (e) => {
             if (!this.active) return;
             const rect = this.gameArea.getBoundingClientRect();
-            basketX = Math.max(45, Math.min(460, e.clientX - rect.left - 45));
+            // Center the basket on mouse
+            let basketX = e.clientX - rect.left - 40; // 40 is half basket width
+
+            // Constrain 
+            basketX = Math.max(0, Math.min(this.gameArea.offsetWidth - 80, basketX));
+
             this.basket.style.left = basketX + 'px';
         };
 
-        this.gameArea.addEventListener('mousemove', mouseMoveHandler);
+        this.gameArea.addEventListener('mousemove', this.mouseMoveHandler);
 
-        // Spawn falling hearts
-        const spawnHeart = () => {
-            if (!this.active) return;
-
-            const heart = document.createElement('div');
-            heart.className = 'falling-heart';
-            heart.textContent = 'Heart';
-            heart.style.left = (50 + Math.random() * 450) + 'px';
-            heart.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
-            this.gameArea.appendChild(heart);
-
-            const checkCollision = setInterval(() => {
-                if (!this.active) {
-                    clearInterval(checkCollision);
-                    return;
-                }
-
-                const heartRect = heart.getBoundingClientRect();
-                const basketRect = this.basket.getBoundingClientRect();
-
-                if (heartRect.bottom >= basketRect.top - 15 &&
-                    heartRect.left < basketRect.right - 15 &&
-                    heartRect.right > basketRect.left + 15 &&
-                    heartRect.top < basketRect.bottom) {
-                    this.score += 10;
-                    document.getElementById('game-score').textContent = `Score: ${this.score}`;
-                    heart.remove();
-                    clearInterval(checkCollision);
-                    Utils.playBeep(600);
-
-                    // Visual feedback
-                    Utils.spawnParticles(basketRect.left + 45, basketRect.top, '✨', 5);
-                }
-
-                if (heartRect.top > window.innerHeight) {
-                    clearInterval(checkCollision);
-                }
-            }, 30);
-
-            setTimeout(() => {
-                if (heart.parentNode) heart.remove();
-                clearInterval(checkCollision);
-            }, 6000);
-
-            if (this.active) {
-                setTimeout(spawnHeart, 700);
-            }
-        };
-
-        spawnHeart();
+        // Start spawning hearts
+        this.spawnLoop();
 
         // End game after 20 seconds
-        setTimeout(() => {
+        this.gameTimer = setTimeout(() => {
             if (this.active) {
                 this.end(true);
             }
         }, 20000);
     },
 
-    end(completed = false) {
+    spawnLoop() {
+        if (!this.active) return;
+
+        this.spawnHeart();
+
+        // Random spawn interval
+        const nextSpawnTime = 600 + Math.random() * 800;
+        this.spawnInterval = setTimeout(() => this.spawnLoop(), nextSpawnTime);
+    },
+
+    spawnHeart() {
+        if (!this.active) return;
+
+        const heart = document.createElement('div');
+        heart.className = 'game-heart'; // Use CSS shape class
+
+        // Random X position
+        const maxLeft = this.gameArea.offsetWidth - 30; // 30 is heart width
+        heart.style.left = Math.floor(Math.random() * maxLeft) + 'px';
+        heart.style.top = '-30px';
+
+        this.gameArea.appendChild(heart);
+
+        // Falling animation via JS interval for collision detection accuracy
+        const speed = 2 + Math.random() * 2;
+
+        const moveInterval = setInterval(() => {
+            if (!this.active) {
+                clearInterval(moveInterval);
+                if (heart.parentNode) heart.remove();
+                return;
+            }
+
+            const currentTop = parseFloat(heart.style.top);
+            const newTop = currentTop + speed;
+            heart.style.top = newTop + 'px';
+
+            // Check collision
+            const heartRect = heart.getBoundingClientRect();
+            const basketRect = this.basket.getBoundingClientRect();
+
+            if (this.checkCollision(heartRect, basketRect)) {
+                this.scoreCatch(heart, moveInterval);
+            }
+
+            // Remove if out of bounds
+            if (newTop > this.gameArea.offsetHeight) {
+                clearInterval(moveInterval);
+                if (heart.parentNode) heart.remove();
+            }
+        }, 16); // ~60fps
+
+        this.checkIntervals.push(moveInterval);
+    },
+
+    checkCollision(heartRect, basketRect) {
+        return !(heartRect.right < basketRect.left ||
+            heartRect.left > basketRect.right ||
+            heartRect.bottom < basketRect.top + 20 || // Allow roughly hitting top of basket
+            heartRect.top > basketRect.bottom);
+    },
+
+    scoreCatch(heart, interval) {
+        this.score += 10;
+        document.getElementById('game-score').textContent = `Score: ${this.score}`;
+
+        // Visuals
+        const rect = heart.getBoundingClientRect();
+        Utils.spawnParticles(rect.left + 15, rect.top + 15, '+10', 5);
+        Utils.playBeep(600 + (this.score * 10));
+
+        clearInterval(interval);
+        if (heart.parentNode) heart.remove();
+    },
+
+    end(completed) {
         this.active = false;
         Utils.hideOverlay('heart-catcher-overlay');
 
-        // Clear falling hearts
-        const hearts = document.querySelectorAll('.falling-heart');
-        hearts.forEach(heart => heart.remove());
-
-        if (completed) {
-            GameState.addCharm(this.score);
-            Utils.showMessage(`Amazing! You caught ${this.score / 10} hearts!`);
-        } else {
-            GameState.addCharm(Math.floor(this.score / 2));
+        // Cleanup listeners
+        if (this.mouseMoveHandler) {
+            this.gameArea.removeEventListener('mousemove', this.mouseMoveHandler);
         }
 
+        // Cleanup timers
+        clearTimeout(this.spawnInterval);
+        clearTimeout(this.gameTimer);
+        this.checkIntervals.forEach(interval => clearInterval(interval));
+        this.checkIntervals = [];
+
+        // Remove all hearts
+        const hearts = document.querySelectorAll('.game-heart');
+        hearts.forEach(h => h.remove());
+
+        if (completed) {
+            const charms = Math.floor(this.score / 2);
+            GameState.addCharm(charms);
+            // Show result via standard message
+            setTimeout(() => {
+                Utils.showMessage(`Time's up! You scored ${this.score}!`);
+            }, 500);
+        }
+
+        // Return to main state
         setTimeout(() => {
-            GameState.isChasing = true;
-            ButtonController.startChase();
-        }, 3000);
+            // Only restart chase if we haven't finished the main game
+            if (!document.getElementById('ending').classList.contains('active')) {
+                GameState.isChasing = true;
+                ButtonController.startChase();
+            }
+        }, 1000);
     }
 };
