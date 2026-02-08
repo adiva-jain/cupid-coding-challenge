@@ -128,7 +128,7 @@ const ButtonController = {
             for (let i = 0; i < 3; i++) {
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
-                Utils.spawnParticles(x, y, ['💖', '💕', '💗', '💝', '💘'][Math.floor(Math.random() * 5)], 8);
+                Utils.spawnParticles(x, y, 'Heart', 8);
             }
         }, 400);
     }
