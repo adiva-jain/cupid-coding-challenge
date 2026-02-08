@@ -39,7 +39,7 @@ const HeartCatcher = {
 
             const heart = document.createElement('div');
             heart.className = 'falling-heart';
-            heart.textContent = ['💖', '💕', '💗', '💝', '💘'][Math.floor(Math.random() * 5)];
+            heart.textContent = 'Heart';
             heart.style.left = (50 + Math.random() * 450) + 'px';
             heart.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
             this.gameArea.appendChild(heart);
@@ -102,7 +102,7 @@ const HeartCatcher = {
 
         if (completed) {
             GameState.addCharm(this.score);
-            Utils.showMessage(`Amazing! You caught ${this.score / 10} hearts! 🎉`);
+            Utils.showMessage(`Amazing! You caught ${this.score / 10} hearts!`);
         } else {
             GameState.addCharm(Math.floor(this.score / 2));
         }
