@@ -1,13 +1,14 @@
 /* ==================== VARIABLES ==================== */
 :root {
-    --primary-pink: #ff6b9d;
-    --primary-purple: #c94b76;
-    --secondary-blue: #667eea;
-    --secondary-purple: #764ba2;
-    --light-pink: #fed6e3;
-    --text-white: #ffffff;
-    --shadow-dark: rgba(0, 0, 0, 0.3);
-    --shadow-light: rgba(255, 255, 255, 0.8);
+    --neon-pink: #ff2d75;
+    --neon-red: #ff003c;
+    --pure-white: #ffffff;
+    --glow-white: rgba(255, 255, 255, 0.8);
+    --space-black: #050608;
+    --glass-bg: rgba(10, 11, 16, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-red: rgba(255, 0, 60, 0.4);
+    --shadow-pink: rgba(255, 45, 117, 0.4);
 }
 
 /* ==================== RESET ==================== */
@@ -19,13 +20,14 @@
 
 /* ==================== BASE ==================== */
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Outfit', sans-serif;
     overflow: hidden;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-color: var(--space-black);
+    color: var(--pure-white);
 }
 
 /* ==================== THREE.JS BACKGROUND ==================== */
@@ -61,142 +63,157 @@ body {
 /* ==================== BACKGROUND DECORATIONS ==================== */
 .bg-heart {
     position: absolute;
-    font-size: 3rem;
-    opacity: 0.15;
+    font-size: 2rem;
+    opacity: 0.1;
+    color: var(--neon-pink);
     pointer-events: none;
+    font-family: 'Syncopate', sans-serif;
 }
 
 .pixel-cloud {
     position: absolute;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 50%;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     pointer-events: none;
 }
 
 /* ==================== TEXT ELEMENTS ==================== */
 #question {
     position: absolute;
-    top: 12%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 4.5rem;
+    font-size: 5rem;
     font-weight: 800;
-    color: var(--text-white);
+    font-family: 'Syncopate', sans-serif;
+    color: var(--pure-white);
     text-shadow:
-        0 0 20px var(--shadow-light),
-        0 0 40px rgba(240, 147, 251, 0.8),
-        4px 4px 15px var(--shadow-dark);
+        0 0 10px var(--neon-pink),
+        0 0 30px var(--neon-red),
+        0 0 60px rgba(255, 0, 60, 0.5);
     text-align: center;
     z-index: 10;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
     pointer-events: none;
 }
 
 #message {
     position: absolute;
-    top: 28%;
+    top: 30%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-white);
-    text-shadow:
-        0 0 20px var(--shadow-light),
-        3px 3px 10px var(--shadow-dark);
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--pure-white);
+    text-shadow: 0 0 10px var(--neon-pink);
     text-align: center;
     opacity: 0;
     transition: opacity 0.5s ease;
     z-index: 10;
-    padding: 25px 50px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    backdrop-filter: blur(15px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 20px 40px;
+    background: var(--glass-bg);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
     max-width: 80%;
     pointer-events: none;
+    letter-spacing: 1px;
 }
 
 #charm-score {
     position: absolute;
     top: 30px;
     right: 40px;
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
-    text-shadow:
-        0 0 15px var(--shadow-light),
-        3px 3px 8px var(--shadow-dark);
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-family: 'Syncopate', sans-serif;
+    color: var(--neon-red);
     z-index: 10;
-    padding: 18px 35px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 50px;
+    padding: 15px 30px;
+    background: var(--glass-bg);
+    border-radius: 4px;
     backdrop-filter: blur(15px);
-    border: 3px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--neon-red);
+    box-shadow: 0 0 15px var(--shadow-red);
     pointer-events: none;
 }
 
 /* ==================== BUTTONS ==================== */
 #button-container {
     position: absolute;
-    top: 55%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    gap: 50px;
+    gap: 60px;
     z-index: 100;
 }
 
 .button {
-    padding: 28px 65px;
-    font-size: 2.2rem;
-    font-weight: 700;
+    padding: 25px 60px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-family: 'Syncopate', sans-serif;
     border: none;
-    border-radius: 25px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 10px 30px var(--shadow-dark);
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     position: relative;
-    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 4px;
 }
 
 #yes-button {
-    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
-    color: white;
-    border: 4px solid rgba(255, 255, 255, 0.6);
-    position: relative;
-    z-index: 101;
+    background: transparent;
+    color: var(--pure-white);
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 20px var(--shadow-pink);
 }
 
 #yes-button:hover {
-    transform: scale(1.15) translateY(-8px);
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.4),
-        0 0 70px rgba(255, 107, 157, 1);
+    background: var(--neon-pink);
+    transform: scale(1.1) rotate(-1deg);
+    box-shadow: 0 0 40px var(--neon-pink);
 }
 
 #no-button {
-    background: linear-gradient(135deg, #a8edea 0%, var(--light-pink) 100%);
-    color: #333;
-    font-weight: 600;
-    border: 4px solid rgba(255, 255, 255, 0.8);
-}
-
-#no-button.wiggling {
-    animation: subtleWiggle 0.6s ease-in-out infinite;
+    background: transparent;
+    color: var(--pure-white);
+    border: 2px solid var(--pure-white);
+    opacity: 0.8;
 }
 
 #no-button:hover {
-    transform: scale(1.08);
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+    box-shadow: 0 0 20px var(--shadow-red);
+    transform: scale(1.05);
 }
 
 /* Button decorations */
 .button-decoration {
     position: absolute;
-    font-size: 2.2rem;
-    animation: decorationSpin 5s linear infinite;
-    filter: drop-shadow(0 3px 6px var(--shadow-dark));
+    font-size: 1rem;
+    color: var(--neon-red);
+    font-family: 'Syncopate', sans-serif;
+    animation: decorationPulse 2s ease-in-out infinite;
     pointer-events: none;
+    text-transform: uppercase;
+}
+
+@keyframes decorationPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
 }
 
 /* Give up button */
@@ -205,26 +222,24 @@ body {
     bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 20px 45px;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-    border: 3px solid rgba(255, 255, 255, 0.7);
-    border-radius: 50px;
+    padding: 15px 40px;
+    background: transparent;
+    color: var(--pure-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
     opacity: 0;
     transition: all 0.4s;
     z-index: 10;
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 600;
-    backdrop-filter: blur(15px);
-    font-family: 'Poppins', sans-serif;
-    text-shadow: 0 2px 5px var(--shadow-dark);
+    font-family: 'Syncopate', sans-serif;
+    letter-spacing: 2px;
 }
 
 #give-up-button:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transform: translateX(-50%) scale(1.1);
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.4);
+    border-color: var(--pure-white);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(-50%) translateY(-5px);
 }
 
 /* ==================== PARTICLES ==================== */
@@ -232,14 +247,19 @@ body {
     position: absolute;
     pointer-events: none;
     z-index: 50;
-    font-size: 2rem;
+    font-size: 0.9rem;
+    font-family: 'Syncopate', sans-serif;
+    color: var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
 }
 
 .heart-trail {
     position: absolute;
     pointer-events: none;
-    font-size: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--neon-red);
     z-index: 40;
+    opacity: 0.5;
 }
 
 /* ==================== OVERLAYS ==================== */
@@ -249,13 +269,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
+    background: rgba(5, 6, 8, 0.85);
+    backdrop-filter: blur(15px);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    animation: fadeIn 0.3s ease;
 }
 
 .overlay.active {
@@ -264,48 +283,48 @@ body {
 
 /* ==================== MINI GAME SELECTOR ==================== */
 #mini-game {
-    background: white;
-    border-radius: 35px;
-    padding: 50px 60px;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 60px;
     text-align: center;
-    max-width: 650px;
-    position: relative;
+    max-width: 700px;
 }
 
 #mini-game h2 {
-    color: var(--primary-purple);
-    margin-bottom: 15px;
-    font-size: 3rem;
-    font-weight: 800;
+    color: var(--pure-white);
+    margin-bottom: 20px;
+    font-size: 3.5rem;
+    font-family: 'Syncopate', sans-serif;
+    letter-spacing: 8px;
 }
 
 #mini-game .subtitle {
-    color: #666;
-    font-size: 1.2rem;
-    margin-bottom: 35px;
+    color: var(--neon-pink);
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
 .game-choice {
     display: block;
     width: 100%;
-    margin: 18px 0;
-    padding: 25px 45px;
-    background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--secondary-purple) 100%);
-    color: white;
-    border: none;
-    border-radius: 18px;
+    margin: 20px 0;
+    padding: 25px;
+    background: transparent;
+    color: var(--pure-white);
+    border: 1px solid var(--neon-red);
     cursor: pointer;
-    font-size: 1.6rem;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    font-family: 'Poppins', sans-serif;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    font-size: 1.4rem;
+    font-family: 'Syncopate', sans-serif;
+    transition: all 0.3s;
+    letter-spacing: 4px;
 }
 
 .game-choice:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+    background: var(--neon-red);
+    box-shadow: 0 0 30px var(--shadow-red);
+    transform: translateY(-5px);
 }
 
 /* ==================== ENDING SCREEN ==================== */
@@ -315,7 +334,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 50%, #f093fb 100%);
+    background: var(--space-black);
     display: none;
     justify-content: center;
     align-items: center;
@@ -328,55 +347,42 @@ body {
 }
 
 #ending h1 {
-    font-size: 7rem;
-    color: white;
-    text-shadow:
-        0 0 30px var(--shadow-light),
-        0 0 60px rgba(255, 107, 157, 0.9),
-        5px 5px 20px var(--shadow-dark);
-    margin-bottom: 40px;
-    font-weight: 800;
-    animation: endingBeat 1s ease-in-out infinite;
+    font-size: 8rem;
+    color: var(--pure-white);
+    font-family: 'Syncopate', sans-serif;
+    text-shadow: 0 0 20px var(--neon-pink), 0 0 50px var(--neon-red);
+    margin-bottom: 30px;
+    letter-spacing: 15px;
 }
 
 #ending p {
-    font-size: 3rem;
-    color: white;
-    text-shadow:
-        0 0 20px var(--shadow-light),
-        3px 3px 12px var(--shadow-dark);
-    font-weight: 600;
-}
-
-#confetti-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+    font-size: 2.5rem;
+    color: var(--neon-pink);
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
 }
 
 /* ==================== CLOSE BUTTONS ==================== */
 .close-game-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--primary-pink);
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.8rem;
+    top: 30px;
+    right: 30px;
+    background: transparent;
+    color: var(--neon-red);
+    border: 1px solid var(--neon-red);
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
     cursor: pointer;
-    font-weight: bold;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
-    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .close-game-btn:hover {
-    background: var(--primary-purple);
-    transform: scale(1.15) rotate(90deg);
+    background: var(--neon-red);
+    color: var(--pure-white);
+    box-shadow: 0 0 20px var(--neon-red);
 }
