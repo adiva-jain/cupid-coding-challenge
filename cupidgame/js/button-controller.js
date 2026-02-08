@@ -15,7 +15,7 @@ const ButtonController = {
             Utils.spawnParticles(
                 rect.left + rect.width / 2,
                 rect.top + rect.height / 2,
-                '💖',
+                'Yes',
                 15
             );
             Utils.playBeep(1200);
@@ -31,7 +31,7 @@ const ButtonController = {
             const rect = this.noButton.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            Utils.spawnParticles(centerX, centerY, '💕', 12);
+            Utils.spawnParticles(centerX, centerY, 'No', 12);
 
             Utils.showMessage(GameState.getMessage());
 
@@ -56,7 +56,7 @@ const ButtonController = {
                 Utils.spawnParticles(
                     rect.left + rect.width / 2,
                     rect.top + rect.height / 2,
-                    '✨',
+                    'Sparkle',
                     6
                 );
             }
