@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/games.css">
+</head>
+
+<body>
+    <!-- Three.js 3D Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="game-container">
+        <div id="scene">
+            <!-- Decorative elements added by JS -->
+        </div>
+
+        <div id="question">Will you be my Valentine? 💕</div>
+        <div id="message"></div>
+        <div id="charm-score">Charm: 0 ✨</div>
+
+        <div id="button-container">
+            <button id="yes-button" class="button">YES! 💖</button>
+            <button id="no-button" class="button wiggling">No</button>
+        </div>
+
+        <button id="give-up-button">Take me to YES 💝</button>
+
+        <!-- Mini game selector - NOW WITH PROPER Z-INDEX -->
+        <div id="mini-game-overlay" class="overlay">
+            <div id="mini-game">
+                <h2>Let's play a game! 🎮</h2>
+                <p class="subtitle">Pick your favorite mini-game!</p>
+                <button class="game-choice" data-game="hearts">❤️ Heart Catcher</button>
+                <button class="game-choice" data-game="memory">🎴 Memory Match</button>
+                <button class="game-choice" data-game="maze">🌹 Love Maze</button>
+            </div>
+        </div>
+
+        <!-- Heart Catcher Game -->
+        <div id="heart-catcher-overlay" class="overlay">
+            <div id="heart-catcher">
+                <button class="close-game-btn">×</button>
+                <h3>Catch the hearts! 💕</h3>
+                <div id="game-score">Score: 0</div>
+                <div id="heart-catcher-area">
+                    <div id="basket">🧺</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Match Game -->
+        <div id="memory-game-overlay" class="overlay">
+            <div id="memory-game">
+                <button class="close-game-btn">×</button>
+                <h2>Match the pairs! 💕</h2>
+                <div id="memory-score">Matches: 0/8</div>
+                <div id="memory-grid"></div>
+            </div>
+        </div>
+
+        <!-- Love Maze Game -->
+        <div id="maze-game-overlay" class="overlay">
+            <div id="maze-game">
+                <button class="close-game-btn">×</button>
+                <h2>Guide the heart! 💖</h2>
+                <p class="instructions">Use arrow keys or WASD</p>
+                <canvas id="maze-canvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+
+        <!-- Ending screen -->
+        <div id="ending">
+            <h1>Yay! 💖</h1>
+            <p>Happy Valentine's Day! 🌹</p>
+            <div id="confetti-container"></div>
+        </div>
+    </div>
+
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Game scripts -->
+    <script src="js/three-background.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/scene-manager.js"></script>
+    <script src="js/button-controller.js"></script>
+    <script src="js/heart-catcher.js"></script>
+    <script src="js/memory-match.js"></script>
+    <script src="js/love-maze.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
