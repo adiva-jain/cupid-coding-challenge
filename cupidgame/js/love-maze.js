@@ -61,11 +61,11 @@ const LoveMaze = {
         }
 
         // Draw goal
-        this.ctx.font = '32px Arial';
-        this.ctx.fillText('💕', this.goalPos.x * this.cellSize + 9, this.goalPos.y * this.cellSize + 38);
+        this.ctx.font = '24px Arial';
+        this.ctx.fillText('GOAL', this.goalPos.x * this.cellSize + 5, this.goalPos.y * this.cellSize + 38);
 
         // Draw player
-        this.ctx.fillText('💖', this.playerPos.x * this.cellSize + 9, this.playerPos.y * this.cellSize + 38);
+        this.ctx.fillText('YOU', this.playerPos.x * this.cellSize + 9, this.playerPos.y * this.cellSize + 38);
     },
 
     setupControls() {
@@ -131,7 +131,7 @@ const LoveMaze = {
         }
 
         if (won) {
-            Utils.showMessage("You found the love! 💕");
+            Utils.showMessage("You found the love!");
             GameState.addCharm(75);
             Utils.playBeep(1200);
         } else {

@@ -3,11 +3,11 @@ const SceneManager = {
     init() {
         const scene = document.getElementById('scene');
 
-        // Add floating hearts in background
+        // Add floating items in background
         for (let i = 0; i < 12; i++) {
             const heart = document.createElement('div');
             heart.className = 'bg-heart';
-            heart.textContent = ['💕', '💖', '💗', '💝', '💘'][Math.floor(Math.random() * 5)];
+            heart.textContent = 'o';
             heart.style.left = (Math.random() * 100) + '%';
             heart.style.top = (Math.random() * 100) + '%';
             heart.style.animationDelay = (Math.random() * 5) + 's';
