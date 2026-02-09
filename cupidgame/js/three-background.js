@@ -152,23 +152,61 @@
         );
     }
 
-    // Standard Starfield
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = 2000;
-    const starCoords = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount * 3; i++) {
-        starCoords[i] = (Math.random() - 0.5) * 600;
-    }
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starCoords, 3));
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 });
-    const stars = new THREE.Points(starGeometry, starMaterial);
-    scene.add(stars);
+    // --- NIGHT SKY IMPLEMENTATION ---
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    // 1. Distant Background Stars (High density, small, static)
+    const bgStarGeo = new THREE.BufferGeometry();
+    const bgStarCount = 4000;
+    const bgStarCoords = new Float32Array(bgStarCount * 3);
+    for (let i = 0; i < bgStarCount * 3; i++) {
+        bgStarCoords[i] = (Math.random() - 0.5) * 800; // Spread wide
+    }
+    bgStarGeo.setAttribute('position', new THREE.BufferAttribute(bgStarCoords, 3));
+    const bgStarMat = new THREE.PointsMaterial({
+        color: 0x88ccff, // Slight blue tint for distance
+        size: 0.1,
+        transparent: true,
+        opacity: 0.4
+    });
+    const bgStars = new THREE.Points(bgStarGeo, bgStarMat);
+    scene.add(bgStars);
+
+    // 2. Bright Foreground Stars (Lower density, twinkling)
+    const fgStarGeo = new THREE.BufferGeometry();
+    const fgStarCount = 500;
+    const fgStarCoords = new Float32Array(fgStarCount * 3);
+    const blinkOffsets = new Float32Array(fgStarCount); // For animation
+
+    for (let i = 0; i < fgStarCount; i++) {
+        fgStarCoords[i * 3] = (Math.random() - 0.5) * 600;
+        fgStarCoords[i * 3 + 1] = (Math.random() - 0.5) * 600;
+        fgStarCoords[i * 3 + 2] = (Math.random() - 0.5) * 400; // Closer
+        blinkOffsets[i] = Math.random() * Math.PI * 2;
+    }
+
+    fgStarGeo.setAttribute('position', new THREE.BufferAttribute(fgStarCoords, 3));
+    fgStarGeo.setAttribute('blinkOffset', new THREE.BufferAttribute(blinkOffsets, 1));
+
+    // Custom shader for twinkling stars would be best, but let's stick to simple looping for now
+    // We'll animate opacity in the loop manually by updating the material if needed, 
+    // or easier: just rotate them to make them "shimmer" as they move.
+    // For true twinkle, we can scale them in the loop.
+
+    const fgStarMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.4,
+        transparent: true,
+        opacity: 0.9,
+    });
+    const fgStars = new THREE.Points(fgStarGeo, fgStarMat);
+    scene.add(fgStars);
+
+
+    // Lights - Deep Space High Contrast
+    const ambientLight = new THREE.AmbientLight(0x111111); // Very Dark Ambient
     scene.add(ambientLight);
 
-    const mainLight = new THREE.DirectionalLight(0xff2d75, 1);
+    const mainLight = new THREE.DirectionalLight(0xff2d75, 1.5); // Strong highlight
     mainLight.position.set(10, 20, 30);
     scene.add(mainLight);
 
@@ -176,20 +214,26 @@
     redLight.position.set(-20, -10, 20);
     scene.add(redLight);
 
+    // Blue rim light for "Moonlight/Starlight" feel
+    const moonLight = new THREE.DirectionalLight(0x4444ff, 0.5);
+    moonLight.position.set(-10, 10, -10);
+    scene.add(moonLight);
+
     // Animation loop
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
         time += 0.005;
 
-        targetX = mouseX * 0.05;
-        targetY = mouseY * 0.05;
+        targetX = mouseX * 0.02; // Slower, more majestic movement
+        targetY = mouseY * 0.02;
 
         hearts.forEach(heart => {
             heart.rotation.y += heart.userData.rotationSpeed;
             heart.rotation.z += heart.userData.rotationSpeed * 0.5;
             heart.position.y += Math.sin(time + heart.userData.floatOffset) * heart.userData.floatSpeed;
 
+            // Subtle pulse
             const pulse = 1 + Math.sin(time * 1.5 + heart.userData.floatOffset) * 0.05;
             heart.scale.set(
                 heart.userData.originalScale * pulse,
@@ -199,12 +243,18 @@
         });
 
         constellations.forEach(group => {
-            group.rotation.z += 0.0005;
+            group.rotation.z += 0.0002; // Very slow drift
         });
 
-        stars.rotation.y += 0.0002;
-        stars.rotation.x += (mouseY * 0.00005);
+        // Rotate starfields at different speeds for depth
+        bgStars.rotation.y += 0.0001;
+        fgStars.rotation.y += 0.0003;
 
+        // Twinkle effect (simulated by slight scaling)
+        // Note: resizing Points material constantly is expensive, so we just rotate.
+        // For a simple "shimmer", the rotation relative to pixels helps.
+
+        // Parallax
         camera.position.x += (targetX - camera.position.x) * 0.05;
         camera.position.y += (-targetY - camera.position.y) * 0.05;
         camera.lookAt(scene.position);
