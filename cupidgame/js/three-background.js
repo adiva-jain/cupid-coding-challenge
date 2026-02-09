@@ -27,6 +27,7 @@
     function createHeartShape() {
         const heartShape = new THREE.Shape();
         const x = 0, y = 0;
+        // Sharper curves for geometric look
         heartShape.moveTo(x + 0.5, y + 0.5);
         heartShape.bezierCurveTo(x + 0.5, y + 0.5, x + 0.4, y, x, y);
         heartShape.bezierCurveTo(x - 0.6, y, x - 0.6, y + 0.7, x - 0.6, y + 0.7);
@@ -37,48 +38,56 @@
         return heartShape;
     }
 
-    // Geometry - Geometric, thick hearts
+    // Geometry - Carved / Low Poly look
     const heartGeometry = new THREE.ExtrudeGeometry(createHeartShape(), {
-        depth: 0.8, // Thicker
+        depth: 0.8,
         bevelEnabled: true,
-        bevelSegments: 1, // Low segments for geometric look
-        steps: 1,
-        bevelSize: 0.2,
-        bevelThickness: 0.2
+        bevelSegments: 0, // No smooth bevel -> sharp edges
+        steps: 1, // No internal steps
+        bevelSize: 0.1,
+        bevelThickness: 0.1,
+        curveSegments: 2 // Very low curve segments for faceted look
     });
 
-    // Alternative Geometric Shape (Icosahedron) as "Abstract Hearts"
-    const geoGeometry = new THREE.IcosahedronGeometry(1, 0);
+    // Abstract geometric shapes to mix in
+    const geoGeometry = new THREE.IcosahedronGeometry(1, 0); // Flat shading ready
 
     const hearts = [];
     const colors = [0xff2d75, 0xff003c, 0xffffff, 0xff5e62];
 
     // Create geometric hearts
     for (let i = 0; i < 50; i++) {
-        const isGeo = Math.random() > 0.5;
+        const isGeo = Math.random() > 0.7; // Mostly hearts, some abstract
         const geometry = isGeo ? geoGeometry : heartGeometry;
 
         const material = new THREE.MeshPhongMaterial({
             color: colors[Math.floor(Math.random() * colors.length)],
             transparent: true,
-            opacity: 0.5,
-            shininess: 100,
+            opacity: 0.6,
+            shininess: 80,
             specular: 0xffffff,
-            wireframe: true,
+            wireframe: false, // Solid for carved look
+            flatShading: true, // Key for "carved" look
             side: THREE.DoubleSide
         });
 
         const heart = new THREE.Mesh(geometry, material);
 
+        // Add wireframe overlay for techy feel if needed, but "carved" usually implies solid
+        // Let's add a subtle wireframe CHILD to emphasize the mesh
+        const wireframeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1 });
+        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMat);
+        heart.add(wireframe);
+
         // Vary size significantly
-        const scale = 0.5 + Math.random() * 3.5; // Some much bigger
+        const scale = 0.5 + Math.random() * 3.5;
         heart.scale.set(scale, scale, scale);
 
         heart.position.set((Math.random() - 0.5) * 160, (Math.random() - 0.5) * 160, (Math.random() - 0.5) * 120);
         heart.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
 
         heart.userData = {
-            rotationSpeed: (Math.random() - 0.5) * 0.02,
+            rotationSpeed: (Math.random() - 0.5) * 0.01, // Slower rotation for heavy carved objects
             floatSpeed: 0.005 + Math.random() * 0.015,
             floatOffset: Math.random() * Math.PI * 2,
             originalScale: scale
