@@ -27,7 +27,7 @@
     function createHeartShape() {
         const heartShape = new THREE.Shape();
         const x = 0, y = 0;
-        // Sharper curves for geometric look
+        // Smoother curves for rounded look
         heartShape.moveTo(x + 0.5, y + 0.5);
         heartShape.bezierCurveTo(x + 0.5, y + 0.5, x + 0.4, y, x, y);
         heartShape.bezierCurveTo(x - 0.6, y, x - 0.6, y + 0.7, x - 0.6, y + 0.7);
@@ -38,46 +38,43 @@
         return heartShape;
     }
 
-    // Geometry - Carved / Low Poly look
+    // Geometry - Rounded / High Poly look
     const heartGeometry = new THREE.ExtrudeGeometry(createHeartShape(), {
-        depth: 0.8,
+        depth: 0.6,
         bevelEnabled: true,
-        bevelSegments: 0, // No smooth bevel -> sharp edges
-        steps: 1, // No internal steps
-        bevelSize: 0.1,
-        bevelThickness: 0.1,
-        curveSegments: 2 // Very low curve segments for faceted look
+        bevelSegments: 8, // Smooth bevel
+        steps: 4, // Smoothing along depth
+        bevelSize: 0.3,
+        bevelThickness: 0.3,
+        curveSegments: 20 // High curve segments for very round look
     });
 
-    // Abstract geometric shapes to mix in
-    const geoGeometry = new THREE.IcosahedronGeometry(1, 0); // Flat shading ready
+    // Abstract geometric shapes to mix in (but keep them wireframe/rounded too)
+    const geoGeometry = new THREE.IcosahedronGeometry(1, 2); // Higher detail
 
     const hearts = [];
     const colors = [0xff2d75, 0xff003c, 0xffffff, 0xff5e62];
 
-    // Create geometric hearts
+    // Create hearts
     for (let i = 0; i < 50; i++) {
-        const isGeo = Math.random() > 0.7; // Mostly hearts, some abstract
+        const isGeo = Math.random() > 0.8; // Mostly round hearts
         const geometry = isGeo ? geoGeometry : heartGeometry;
 
         const material = new THREE.MeshPhongMaterial({
             color: colors[Math.floor(Math.random() * colors.length)],
             transparent: true,
-            opacity: 0.6,
-            shininess: 80,
+            opacity: 0.4,
+            shininess: 100,
             specular: 0xffffff,
-            wireframe: false, // Solid for carved look
-            flatShading: true, // Key for "carved" look
+            wireframe: true, // WIREFRAME as requested
+            flatShading: false, // SMOOTH, not flat/carved
             side: THREE.DoubleSide
         });
 
         const heart = new THREE.Mesh(geometry, material);
 
-        // Add wireframe overlay for techy feel if needed, but "carved" usually implies solid
-        // Let's add a subtle wireframe CHILD to emphasize the mesh
-        const wireframeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1 });
-        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMat);
-        heart.add(wireframe);
+        // Remove the child wireframe since the main mesh is now wireframe
+        // This prevents z-fighting or double-line look
 
         // Vary size significantly
         const scale = 0.5 + Math.random() * 3.5;
