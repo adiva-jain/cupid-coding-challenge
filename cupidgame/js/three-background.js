@@ -1,4 +1,4 @@
-// Three.js Sci-Fi Background with geometric hearts and starfield
+// Three.js Sci-Fi Background with Puffy Hearts and Constellations
 (function () {
     const canvas = document.getElementById('bg-canvas');
     const scene = new THREE.Scene();
@@ -7,7 +7,7 @@
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    camera.position.z = 40;
+    camera.position.z = 50;
 
     // Mouse interaction
     let mouseX = 0;
@@ -38,54 +38,49 @@
         return heartShape;
     }
 
-    // Geometry - Rounded / High Poly look
+    // Geometry - Puffy 3D Look
     const heartGeometry = new THREE.ExtrudeGeometry(createHeartShape(), {
-        depth: 0.6,
+        depth: 1.5, // Much thicker
         bevelEnabled: true,
-        bevelSegments: 8, // Smooth bevel
-        steps: 4, // Smoothing along depth
-        bevelSize: 0.3,
-        bevelThickness: 0.3,
-        curveSegments: 20 // High curve segments for very round look
+        bevelSegments: 10, // Smooth
+        steps: 4,
+        bevelSize: 0.5, // Puffs out
+        bevelThickness: 0.5, // Rounds off
+        curveSegments: 20
     });
-
-    // Abstract geometric shapes to mix in (but keep them wireframe/rounded too)
-    const geoGeometry = new THREE.IcosahedronGeometry(1, 2); // Higher detail
 
     const hearts = [];
     const colors = [0xff2d75, 0xff003c, 0xffffff, 0xff5e62];
 
     // Create hearts
-    for (let i = 0; i < 50; i++) {
-        const isGeo = Math.random() > 0.8; // Mostly round hearts
-        const geometry = isGeo ? geoGeometry : heartGeometry;
-
+    for (let i = 0; i < 40; i++) {
         const material = new THREE.MeshPhongMaterial({
             color: colors[Math.floor(Math.random() * colors.length)],
             transparent: true,
-            opacity: 0.4,
-            shininess: 100,
+            opacity: 0.3,
+            shininess: 120,
             specular: 0xffffff,
-            wireframe: true, // WIREFRAME as requested
-            flatShading: false, // SMOOTH, not flat/carved
+            wireframe: true,
             side: THREE.DoubleSide
         });
 
-        const heart = new THREE.Mesh(geometry, material);
+        const heart = new THREE.Mesh(heartGeometry, material);
 
-        // Remove the child wireframe since the main mesh is now wireframe
-        // This prevents z-fighting or double-line look
-
-        // Vary size significantly
-        const scale = 0.5 + Math.random() * 3.5;
+        // Massive size variation: 0.5x to 5x
+        const scale = 0.5 + Math.random() * 4.5;
         heart.scale.set(scale, scale, scale);
 
-        heart.position.set((Math.random() - 0.5) * 160, (Math.random() - 0.5) * 160, (Math.random() - 0.5) * 120);
+        heart.position.set(
+            (Math.random() - 0.5) * 200,
+            (Math.random() - 0.5) * 200,
+            (Math.random() - 0.5) * 150
+        );
+
         heart.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
 
         heart.userData = {
-            rotationSpeed: (Math.random() - 0.5) * 0.01, // Slower rotation for heavy carved objects
-            floatSpeed: 0.005 + Math.random() * 0.015,
+            rotationSpeed: (Math.random() - 0.5) * 0.005,
+            floatSpeed: 0.005 + Math.random() * 0.01,
             floatOffset: Math.random() * Math.PI * 2,
             originalScale: scale
         };
@@ -94,15 +89,72 @@
         scene.add(heart);
     }
 
-    // Create Starfield - More stars
+    // Create Heart Constellations
+    const constellations = [];
+    function createHeartConstellation(xC, yC, zC, scale) {
+        const group = new THREE.Group();
+        const points = [];
+        const starGeom = new THREE.BufferGeometry();
+        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.3 });
+
+        // Generate points along heart curve
+        for (let t = 0; t < Math.PI * 2; t += 0.4) {
+            // Heart curve formula: 
+            // x = 16sin^3(t)
+            // y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
+            let x = 16 * Math.pow(Math.sin(t), 3);
+            let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+            x *= scale * 0.1;
+            y *= scale * 0.1;
+
+            // Add jitter
+            x += (Math.random() - 0.5) * 0.5;
+            y += (Math.random() - 0.5) * 0.5;
+
+            points.push(new THREE.Vector3(x, y, 0));
+        }
+
+        // Close loop
+        points.push(points[0]);
+
+        const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
+        const lineMat = new THREE.LineBasicMaterial({ color: 0xff2d75, transparent: true, opacity: 0.3 });
+        const line = new THREE.Line(lineGeom, lineMat);
+
+        // Add stars at vertices
+        const stars = new THREE.Points(lineGeom, starMat);
+
+        group.add(line);
+        group.add(stars);
+
+        group.position.set(xC, yC, zC);
+        // Random rotation
+        group.rotation.z = (Math.random() - 0.5) * 0.5;
+
+        scene.add(group);
+        constellations.push(group);
+    }
+
+    // Add 8 Constellations
+    for (let i = 0; i < 8; i++) {
+        createHeartConstellation(
+            (Math.random() - 0.5) * 150,
+            (Math.random() - 0.5) * 100,
+            (Math.random() - 0.5) * 100,
+            2 + Math.random() * 3 // Scale
+        );
+    }
+
+    // Standard Starfield - Higher Density
     const starGeometry = new THREE.BufferGeometry();
-    const starCount = 2000;
+    const starCount = 3000;
     const starCoords = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount * 3; i++) {
-        starCoords[i] = (Math.random() - 0.5) * 500;
+        starCoords[i] = (Math.random() - 0.5) * 600;
     }
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starCoords, 3));
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2, transparent: true, opacity: 0.7 });
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.8 });
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
@@ -122,17 +174,17 @@
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
-        time += 0.01;
+        time += 0.005;
 
-        targetX = mouseX * 0.1;
-        targetY = mouseY * 0.1;
+        targetX = mouseX * 0.05;
+        targetY = mouseY * 0.05;
 
         hearts.forEach(heart => {
             heart.rotation.y += heart.userData.rotationSpeed;
             heart.rotation.z += heart.userData.rotationSpeed * 0.5;
             heart.position.y += Math.sin(time + heart.userData.floatOffset) * heart.userData.floatSpeed;
 
-            const pulse = 1 + Math.sin(time * 2 + heart.userData.floatOffset) * 0.1;
+            const pulse = 1 + Math.sin(time * 1.5 + heart.userData.floatOffset) * 0.05;
             heart.scale.set(
                 heart.userData.originalScale * pulse,
                 heart.userData.originalScale * pulse,
@@ -140,8 +192,12 @@
             );
         });
 
-        stars.rotation.y += 0.0005;
-        stars.rotation.x += (mouseY * 0.0001);
+        constellations.forEach(group => {
+            group.rotation.z += 0.001; // Slow spin
+        });
+
+        stars.rotation.y += 0.0002;
+        stars.rotation.x += (mouseY * 0.00005);
 
         camera.position.x += (targetX - camera.position.x) * 0.05;
         camera.position.y += (-targetY - camera.position.y) * 0.05;
