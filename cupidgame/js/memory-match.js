@@ -1,6 +1,15 @@
 // Memory Match Mini-Game
 const MemoryMatch = {
-    emojis: ['Heart', 'Star', 'Circle', 'Square', 'Triangle', 'Diamond', 'Rose', 'Flower'],
+    emojiPairs: [
+        { name: 'Heart', icon: '❤️' },
+        { name: 'Star', icon: '⭐' },
+        { name: 'Circle', icon: '🟣' },
+        { name: 'Square', icon: '🟦' },
+        { name: 'Triangle', icon: '🔺' },
+        { name: 'Diamond', icon: '💎' },
+        { name: 'Rose', icon: '🌹' },
+        { name: 'Flower', icon: '🌸' }
+    ],
     cards: [],
     flippedCards: [],
     matchedPairs: 0,
@@ -18,17 +27,18 @@ const MemoryMatch = {
         this.flippedCards = [];
 
         // Create shuffled pairs
-        const pairs = [...this.emojis, ...this.emojis];
+        const pairs = [...this.emojiPairs, ...this.emojiPairs];
         pairs.sort(() => Math.random() - 0.5);
 
         const grid = document.getElementById('memory-grid');
         grid.innerHTML = '';
         this.cards = [];
 
-        pairs.forEach((emoji, index) => {
+        pairs.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'memory-card';
-            card.dataset.emoji = emoji;
+            card.dataset.name = item.name;
+            card.dataset.icon = item.icon;
             card.dataset.index = index;
             card.addEventListener('click', () => this.flipCard(card));
             grid.appendChild(card);
@@ -44,7 +54,15 @@ const MemoryMatch = {
             this.flippedCards.length >= 2) return;
 
         card.classList.add('flipped');
-        card.textContent = card.dataset.emoji;
+
+        // Add content with structure for rotation fix
+        card.innerHTML = `
+            <div class="memory-card-content">
+                <div class="memory-icon">${card.dataset.icon}</div>
+                <div class="memory-name">${card.dataset.name}</div>
+            </div>
+        `;
+
         this.flippedCards.push(card);
         Utils.playBeep(800);
 
@@ -56,7 +74,7 @@ const MemoryMatch = {
     checkMatch() {
         const [card1, card2] = this.flippedCards;
 
-        if (card1.dataset.emoji === card2.dataset.emoji) {
+        if (card1.dataset.name === card2.dataset.name) {
             card1.classList.add('matched');
             card2.classList.add('matched');
             this.matchedPairs++;
@@ -74,8 +92,8 @@ const MemoryMatch = {
         } else {
             card1.classList.remove('flipped');
             card2.classList.remove('flipped');
-            card1.textContent = '';
-            card2.textContent = '';
+            card1.innerHTML = '';
+            card2.innerHTML = '';
         }
 
         this.flippedCards = [];
