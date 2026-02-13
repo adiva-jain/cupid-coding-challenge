@@ -23,17 +23,17 @@ const GameState = {
         // Unlock decorations
         if (this.charmScore >= 100 && this.noButtonPhase < 1) {
             this.noButtonPhase = 1;
-            this.addButtonDecoration('Hat', -15, -35);
+            this.addButtonDecoration('🎩', -15, -35);
             Utils.showMessage("Nice! The NO button is getting fancy!");
         }
         if (this.charmScore >= 200 && this.noButtonPhase < 2) {
             this.noButtonPhase = 2;
-            this.addButtonDecoration('Bow', 15, -35);
+            this.addButtonDecoration('🎀', 15, -35);
             Utils.showMessage("Even fancier now!");
         }
         if (this.charmScore >= 300 && this.noButtonPhase < 3) {
             this.noButtonPhase = 3;
-            this.addButtonDecoration('Crown', 0, -40);
+            this.addButtonDecoration('👑', 0, -40);
             Utils.showMessage("Royalty!");
         }
     },
