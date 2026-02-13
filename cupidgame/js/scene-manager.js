@@ -3,16 +3,8 @@ const SceneManager = {
     init() {
         const scene = document.getElementById('scene');
 
-        // Add floating items in background
-        for (let i = 0; i < 12; i++) {
-            const heart = document.createElement('div');
-            heart.className = 'bg-heart';
-            heart.textContent = 'o';
-            heart.style.left = (Math.random() * 100) + '%';
-            heart.style.top = (Math.random() * 100) + '%';
-            heart.style.animationDelay = (Math.random() * 5) + 's';
-            scene.appendChild(heart);
-        }
+        // Floating hearts removed as per user request
+
 
         // Add decorative clouds
         for (let i = 0; i < 8; i++) {
