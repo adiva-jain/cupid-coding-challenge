@@ -160,6 +160,29 @@
     animation: matchPulse 1.5s infinite;
 }
 
+.memory-card-content {
+    transform: rotateY(180deg);
+    /* Fix mirroring */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.memory-icon {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.memory-name {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
 @keyframes matchPulse {
 
     0%,
