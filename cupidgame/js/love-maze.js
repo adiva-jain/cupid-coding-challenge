@@ -61,11 +61,40 @@ const LoveMaze = {
         }
 
         // Draw goal
-        this.ctx.font = '24px Arial';
-        this.ctx.fillText('GOAL', this.goalPos.x * this.cellSize + 5, this.goalPos.y * this.cellSize + 38);
+        this.ctx.fillStyle = '#ff003c';
+        this.ctx.font = 'bold 20px "VT323", monospace';
+        this.ctx.fillText('GOAL', this.goalPos.x * this.cellSize + 8, this.goalPos.y * this.cellSize + 32);
 
-        // Draw player
-        this.ctx.fillText('YOU', this.playerPos.x * this.cellSize + 9, this.playerPos.y * this.cellSize + 38);
+        // Draw player (Heart)
+        const px = this.playerPos.x * this.cellSize + this.cellSize / 2;
+        const py = this.playerPos.y * this.cellSize + this.cellSize / 2 + 2;
+        const size = 30;
+
+        this.ctx.fillStyle = '#ff2d75';
+        this.ctx.beginPath();
+        const topCurveHeight = size * 0.3;
+        this.ctx.moveTo(px, py + size * 0.2);
+        this.ctx.bezierCurveTo(
+            px, py - topCurveHeight,
+            px - size / 2, py - topCurveHeight,
+            px - size / 2, py + size * 0.2
+        );
+        this.ctx.bezierCurveTo(
+            px - size / 2, py + size * 0.4,
+            px, py + size * 0.6,
+            px, py + size * 0.8
+        );
+        this.ctx.bezierCurveTo(
+            px, py + size * 0.6,
+            px + size / 2, py + size * 0.4,
+            px + size / 2, py + size * 0.2
+        );
+        this.ctx.bezierCurveTo(
+            px + size / 2, py - topCurveHeight,
+            px, py - topCurveHeight,
+            px, py + size * 0.2
+        );
+        this.ctx.fill();
     },
 
     setupControls() {
